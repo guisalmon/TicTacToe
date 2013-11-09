@@ -9,6 +9,7 @@ import java.util.List;
 
 import org.rob.tic_257779.R;
 import org.rob.tic_257779.preferences.PreferencesActivity;
+import org.rob.tic_257779.services.MusicService;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -67,6 +68,15 @@ public class MainGameActivity extends Activity {
     }
 
     @Override
+	protected void onResume() {
+        //Starts the background music
+		super.onResume();
+        Intent intent = new Intent(this, MusicService.class);
+        startService(intent);
+        Toast.makeText(this, "onResume", Toast.LENGTH_SHORT).show();
+	}
+
+	@Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main_game_menu, menu);
@@ -222,6 +232,7 @@ public class MainGameActivity extends Activity {
     	}
     	
     	//If the game is already full declare stalemate
+    	//TODO And if it is after AI's turn, genius ?
     	if (full) {
     		Toast.makeText(this, "Stalemate...", Toast.LENGTH_SHORT).show();
     		initGame();
@@ -401,4 +412,13 @@ public class MainGameActivity extends Activity {
 		}
 		return branch == 2;
 	}
+
+	@Override
+	protected void onPause() {
+		Intent intent = new Intent(this, MusicService.class);
+		stopService(intent);
+		super.onPause();
+	}
+	
+	
 }

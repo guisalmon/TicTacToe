@@ -25,6 +25,7 @@
         <activity 
             android:name="org.rob.tic_257779.preferences.PreferencesActivity"
             android:label="@string/app_name"/>
+        <service android:enabled="true" android:name="org.rob.tic_257779.services.MusicService" />
     </application>
 
 </manifest>
