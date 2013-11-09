@@ -15,6 +15,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -54,6 +55,7 @@ public class MainGameActivity extends Activity {
 	private List<Position> player;
 	private List<Position> ai;
 	private Button aiBegins;
+	private boolean withMusic;
 	
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,11 +71,13 @@ public class MainGameActivity extends Activity {
 
     @Override
 	protected void onResume() {
-        //Starts the background music
-		super.onResume();
-        Intent intent = new Intent(this, MusicService.class);
-        startService(intent);
-        Toast.makeText(this, "onResume", Toast.LENGTH_SHORT).show();
+    	super.onResume();
+		withMusic = PreferenceManager.getDefaultSharedPreferences(this).getBoolean("bg_music", true);
+		//Starts the background music if necessary
+		if (withMusic){
+			Intent intent = new Intent(this, MusicService.class);
+	        startService(intent);
+		}
 	}
 
 	@Override
