@@ -8,7 +8,7 @@
     <string-array name="disp_symbols_array">
         <item>X</item>
         <item>O</item>
-        <item>None</item>
+        <item> </item>
     </string-array>
     <string-array name="color_array">
         <item>Red</item>
