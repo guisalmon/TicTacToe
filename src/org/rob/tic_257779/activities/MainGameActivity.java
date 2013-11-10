@@ -27,6 +27,7 @@ import android.view.ViewGroup.LayoutParams;
 import android.widget.Button;
 import android.widget.TableLayout;
 import android.widget.TableRow;
+import android.widget.Toast;
 
 /**
  * This activity displays the main game and handles the device moves against the player
@@ -139,6 +140,7 @@ public class MainGameActivity extends Activity {
     	TableLayout table = (TableLayout)findViewById(R.id.board);
     	TableLayout.LayoutParams params = new TableLayout.LayoutParams(0, LayoutParams.MATCH_PARENT, (float) 1.0);
     	TableRow.LayoutParams rowParams = new TableRow.LayoutParams(0, LayoutParams.MATCH_PARENT, (float) 1.0);
+    	rowParams.setMargins(10, 10, 10, 10);
     	
     	for (int p=0; p<3; p++){
     		TableRow row = new TableRow(this);
@@ -146,7 +148,7 @@ public class MainGameActivity extends Activity {
 	    	for (int i=0; i<3; i++){
 	    		Button button;
 	    		button = new Button(this);
-	    		button.setTextColor(Color.GRAY);
+	    		button.setTextColor(Color.DKGRAY);
 	    		button.setLayoutParams(rowParams);
 	    		button.setId(count);
 	    		row.addView(button);
@@ -160,9 +162,10 @@ public class MainGameActivity extends Activity {
     	TableRow row = new TableRow(this);
 		row.setLayoutParams(params);
 		aiBegins = new Button(this);
-		aiBegins.setTextColor(Color.GRAY);
 		aiBegins.setLayoutParams(rowParams);
 		aiBegins.setText("Let AI begin");
+		aiBegins.setTextColor(Color.DKGRAY);
+		aiBegins.setBackgroundColor(Color.LTGRAY);
 		aiBegins.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
@@ -176,9 +179,10 @@ public class MainGameActivity extends Activity {
 		
 		//Adds the button allowing the AI to begin
 		Button newGame = new Button(this);
-		newGame.setTextColor(Color.GRAY);
 		newGame.setLayoutParams(rowParams);
 		newGame.setText("Begin new game");
+		newGame.setTextColor(Color.DKGRAY);
+		newGame.setBackgroundColor(Color.LTGRAY);
 		newGame.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
@@ -224,11 +228,20 @@ public class MainGameActivity extends Activity {
 	 */
     private void initGame(){
     	findViewById(R.id.board).setVisibility(View.VISIBLE);
-    	human = new Player("X");
-    	artInt = new ArtificialIntelligence("O");
+    	int humanColor = Color.parseColor(PreferenceManager.getDefaultSharedPreferences(this).getString("bg_human", "#55cc55"));
+    	int aiColor = Color.parseColor(PreferenceManager.getDefaultSharedPreferences(this).getString("bg_ai", "#cc5555"));
+    	String humanName = PreferenceManager.getDefaultSharedPreferences(this).getString("player_symbol", "X");
+    	String aiName;
+    	if (humanName.equals("O")) aiName = "X";
+    	else if (humanName.equals("")) aiName = "";
+    	else aiName = "O";
+    	Toast.makeText(this, "\""+humanName+"\"", Toast.LENGTH_LONG).show();
+    	human = new Player(humanName, humanColor);
+    	artInt = new ArtificialIntelligence(aiName, aiColor);
         for (Button b : slots){
         	b.setText("");
         	b.setClickable(true);
+        	b.setBackgroundColor(Color.LTGRAY);
         }
         aiBegins.setClickable(true);
         findViewById(R.id.message_frame).setVisibility(View.GONE);
@@ -269,12 +282,17 @@ public class MainGameActivity extends Activity {
      * Displays message of victory or defeat
      */
     private void displayVictory(boolean isVictory){
+    	findViewById(R.id.message_frame).setBackgroundColor(Color.LTGRAY);
     	if (isVictory){
     		findViewById(R.id.message_frame).setVisibility(View.VISIBLE);
     		((Button)findViewById(R.id.message)).setText("Victory !");
+    		((Button)findViewById(R.id.message)).setBackgroundColor(human.color);
+    		((Button)findViewById(R.id.message)).setTextColor(Color.DKGRAY);
     	}else{
     		findViewById(R.id.message_frame).setVisibility(View.VISIBLE);
     		((Button)findViewById(R.id.message)).setText("You lose !");
+    		((Button)findViewById(R.id.message)).setBackgroundColor(artInt.color);
+    		((Button)findViewById(R.id.message)).setTextColor(Color.DKGRAY);
     	}
     	findViewById(R.id.board).setVisibility(View.INVISIBLE);
     }

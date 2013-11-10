@@ -9,8 +9,8 @@ public class ArtificialIntelligence extends Player{
 
 	public boolean wins;
 
-	public ArtificialIntelligence(String name) {
-		super(name);
+	public ArtificialIntelligence(String name, int color) {
+		super(name, color);
 		wins = false;
 	}
 	

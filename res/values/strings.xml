@@ -6,6 +6,14 @@
     <string name="hello_world">Hello world!</string>
     <string name="bg_music">Play background music ?</string>
     <string name="summary_bg_music">Let the music play in the background while playing the game</string>
+    <string name="bg_human">Choose human background color</string>
+    <string name="summary_bg_human">Choose whatever color will be displayed on buttons owned by the player</string>
+    <string name="bg_ai">Choose AI background color</string>
+    <string name="summary_bg_ai">Choose whatever color will be displayed on buttons owned by the AI</string>
+    <string name="color_text">Choose text color</string>
+    <string name="summary_color_text">Choose whatever color will be used for text</string>
+    <string name="player_symbol">Choose your symbol</string>
+    <string name="summary_player_symbol">Choose the symbol which will be displayed on the cells you own</string>
     <string name="general_preferences">Settings</string>
 
 </resources>

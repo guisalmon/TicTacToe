@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="symbols_array">
+        <item>X</item>
+        <item>O</item>
+        <item>None</item>
+    </string-array>
+    <string-array name="disp_symbols_array">
+        <item>X</item>
+        <item>O</item>
+        <item> </item>
+    </string-array>
+</resources>
+

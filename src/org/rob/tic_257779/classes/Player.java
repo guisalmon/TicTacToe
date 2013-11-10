@@ -35,8 +35,10 @@ public class Player {
 	
 	private List<Position> prevMoves;
 	private String name;
+	public int color;
 	
-	public Player(String name) {
+	public Player(String name, int color) {
+		this.color = color;
 		this.prevMoves = new ArrayList<Position>();
 		this.name = name;
 	}
@@ -82,6 +84,7 @@ public class Player {
     public void move(Button b){
     	b.setClickable(false);
 		b.setText(name);
+		b.setBackgroundColor(color);
     	prevMoves.add(new Position(b));
     }
     
