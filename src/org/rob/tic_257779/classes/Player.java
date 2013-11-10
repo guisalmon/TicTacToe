@@ -24,6 +24,10 @@ public class Player {
 			this.y = (b.getId()-(b.getId()%3))/3;
 		}
 		
+		public int getId(){
+			return 3*y+x;
+		}
+		
 		public boolean isCorner() {
 			return (x==0 || x==2)&&(y==0 || y==2);
 		}
@@ -43,6 +47,15 @@ public class Player {
 	
 	public boolean hasMoved() {
 		return !prevMoves.isEmpty();
+	}
+	
+	public boolean hasButton(Button b){
+		for(Position p : prevMoves){
+			if(b.getId()==p.getId()){
+				return true;
+			}
+		}
+		return false;
 	}
 	
 	/**

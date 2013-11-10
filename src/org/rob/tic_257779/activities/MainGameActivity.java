@@ -15,6 +15,7 @@ import org.rob.tic_257779.services.MusicService;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -34,11 +35,14 @@ import android.widget.TableRow;
  */
 public class MainGameActivity extends Activity {
 	
+	public static final String GAME_SAVE = "GameSave";
+	
 	private List<Button> slots = new ArrayList<Button>();
 	private Button aiBegins;
 	private boolean withMusic;
 	private Player human;
 	private ArtificialIntelligence artInt;
+	private SharedPreferences settings;
 	
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,19 +51,53 @@ public class MainGameActivity extends Activity {
         
         //Dynamically creates the grid
         create_board();
-        
-        //Initialize the ai and player's informations
-        initGame();
     }
 
     @Override
 	protected void onResume() {
     	super.onResume();
+    	
+    	//Initialize the ai and player's informations
+        initGame();
+        
+        //Restore previous game
+    	settings = getPreferences(MODE_PRIVATE);
+    	restoreGame(settings.getInt(GAME_SAVE, 0));
+    	
+    	//Start the background music if necessary
 		withMusic = PreferenceManager.getDefaultSharedPreferences(this).getBoolean("bg_music", true);
-		//Starts the background music if necessary
 		if (withMusic){
 			Intent intent = new Intent(this, MusicService.class);
 	        startService(intent);
+		}
+	}
+    
+	private int createSave() {
+		int save = 0;
+		for(Button b : slots){
+			save = save*10;
+			if (human.hasButton(b)){
+				save = save+1;
+			}
+			if (artInt.hasButton(b)){
+				save = save+2;
+			}
+		}
+		return save;
+	}
+
+	private void restoreGame(int save) {
+		for(int i=8; i>=0; i--){
+			switch (save%10) {
+			case 2:
+				artInt.move(slots.get(i));
+				break;
+			case 1:
+				human.move(slots.get(i));
+			default:
+				break;
+			}
+			save = save/10;
 		}
 	}
 
@@ -85,6 +123,10 @@ public class MainGameActivity extends Activity {
 	protected void onPause() {
 		Intent intent = new Intent(this, MusicService.class);
 		stopService(intent);
+		SharedPreferences.Editor prefEditor = settings.edit();
+		prefEditor.clear();
+	    prefEditor.putInt(GAME_SAVE, createSave());
+	    prefEditor.commit();
 		super.onPause();
 	}
 
