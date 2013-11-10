@@ -26,7 +26,6 @@ import android.view.ViewGroup.LayoutParams;
 import android.widget.Button;
 import android.widget.TableLayout;
 import android.widget.TableRow;
-import android.widget.Toast;
 
 /**
  * This activity displays the main game and handles the device moves against the player
@@ -81,6 +80,13 @@ public class MainGameActivity extends Activity {
 		}
 		return super.onOptionsItemSelected(item);
 	}
+	
+	@Override
+	protected void onPause() {
+		Intent intent = new Intent(this, MusicService.class);
+		stopService(intent);
+		super.onPause();
+	}
 
 	/**
      * Creates dynamically the game layout
@@ -98,8 +104,6 @@ public class MainGameActivity extends Activity {
 	    	for (int i=0; i<3; i++){
 	    		Button button;
 	    		button = new Button(this);
-	    		//TODO handle color of buttons
-	    		//if (p+i == 2) button.setBackgroundColor(Color.RED);
 	    		button.setTextColor(Color.GRAY);
 	    		button.setLayoutParams(rowParams);
 	    		button.setId(count);
@@ -122,10 +126,24 @@ public class MainGameActivity extends Activity {
 			public void onClick(View v) {
 				if (!artInt.hasMoved()){
 					artInt.play(slots, human);
+					aiBegins.setClickable(false);
 				}
 			}
 		});
 		row.addView(aiBegins);
+		
+		//Adds the button allowing the AI to begin
+		Button newGame = new Button(this);
+		newGame.setTextColor(Color.GRAY);
+		newGame.setLayoutParams(rowParams);
+		newGame.setText("Begin new game");
+		newGame.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				initGame();
+			}
+		});
+		row.addView(newGame);
 		table.addView(row);
 		
 		//Adds handling of the grid buttons
@@ -134,13 +152,36 @@ public class MainGameActivity extends Activity {
 				@Override
 				public void onClick(View v) {
 					handleMove((Button)v);
+					if (aiBegins.isClickable()) aiBegins.setClickable(false);
 				}
 			});
     	}
+    	
+    	((Button)findViewById(R.id.message)).setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				initGame();
+			}
+		});
     }
     
-    //Initiates a new game
+    /**
+     * Determinates if further moves are possible
+     * @return true if no moves are possible
+     */
+    private boolean isStalemate() {
+		boolean stalemate = true;
+		for(Button b : slots){
+			stalemate = stalemate && !b.isClickable();
+		}
+		return stalemate;
+	}
+
+	/**
+	 * Initiates a new game
+	 */
     private void initGame(){
+    	findViewById(R.id.board).setVisibility(View.VISIBLE);
     	human = new Player("X");
     	artInt = new ArtificialIntelligence("O");
         for (Button b : slots){
@@ -148,6 +189,7 @@ public class MainGameActivity extends Activity {
         	b.setClickable(true);
         }
         aiBegins.setClickable(true);
+        findViewById(R.id.message_frame).setVisibility(View.GONE);
     }
     
     /**
@@ -158,26 +200,40 @@ public class MainGameActivity extends Activity {
     	b.setClickable(false);
     	b.setText("X");
     	if (human.isVictory(b)){
-    		Toast.makeText(this, "Victory !", Toast.LENGTH_SHORT).show();
     		endGame();
+    		displayVictory(true);
     	}else{
     		human.move(b);
-    		artInt.play(slots, human);
+    		if (!isStalemate()){
+	    		artInt.play(slots, human);
+	    		if (artInt.wins) {
+	    			endGame();
+	    			displayVictory(false);
+	    		}
+    		}
     	}
 	}
     
+    /**
+     * Ends the game by preventing any further move
+     */
     private void endGame() {
 		for (Button b : slots){
 			b.setClickable(false);
 		}
 	}
-
-	@Override
-	protected void onPause() {
-		Intent intent = new Intent(this, MusicService.class);
-		stopService(intent);
-		super.onPause();
-	}
-	
-	
+    
+    /**
+     * Displays message of victory or defeat
+     */
+    private void displayVictory(boolean isVictory){
+    	if (isVictory){
+    		findViewById(R.id.message_frame).setVisibility(View.VISIBLE);
+    		((Button)findViewById(R.id.message)).setText("Victory !");
+    	}else{
+    		findViewById(R.id.message_frame).setVisibility(View.VISIBLE);
+    		((Button)findViewById(R.id.message)).setText("You lose !");
+    	}
+    	findViewById(R.id.board).setVisibility(View.INVISIBLE);
+    }
 }

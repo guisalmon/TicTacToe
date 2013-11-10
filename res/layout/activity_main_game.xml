@@ -1,8 +1,25 @@
-<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="fill_parent"
-    android:id="@+id/board"
-    android:layout_height="fill_parent"
-    android:layout_margin="0dp">
-    
-</TableLayout>
+    android:layout_height="fill_parent">
+    <LinearLayout
+        android:id="@+id/message_frame"
+	    android:layout_width="fill_parent"
+	    android:layout_height="fill_parent"
+	    android:background="#ff555555"
+	    android:orientation="vertical">
+	    <Button
+	        android:layout_marginTop="200dp"
+	        android:id="@+id/message"
+	        android:layout_width="fill_parent"
+	        android:textSize="60sp"
+	        android:textColor="#ffaaaaaa"
+	        android:layout_height="200dp"/>
+	</LinearLayout>
+	<TableLayout 
+	    android:layout_width="fill_parent"
+	    android:id="@+id/board"
+	    android:layout_height="fill_parent"
+	    android:layout_margin="0dp">
+	</TableLayout>
+</FrameLayout>

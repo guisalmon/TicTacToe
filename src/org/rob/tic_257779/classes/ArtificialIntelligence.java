@@ -7,22 +7,23 @@ import android.widget.Button;
 
 public class ArtificialIntelligence extends Player{
 
+	public boolean wins;
+
 	public ArtificialIntelligence(String name) {
 		super(name);
+		wins = false;
 	}
 	
 	/**
      * Makes the AI choose the best move to make if it's possible
      */
     public void play(List<Button> slots, Player opponent){
-    	//TODO
-    	//AI no longers have to begin
-    	//aiBegins.setClickable(false);
     	
     	//If a move allows victory, do this move
     	for (Button b : slots){
     		if (b.isClickable() && isVictory(b)){
     			move(b);
+    			wins = true;
     			return;
     		}
     	}
