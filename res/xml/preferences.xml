@@ -5,16 +5,18 @@
                 android:title="@string/bg_music"
                 android:summary="@string/summary_bg_music"
                 android:defaultValue="true" />
-    <EditTextPreference
+    <ListPreference
         		android:key="bg_human"
         		android:title="@string/bg_human"
         		android:summary="@string/summary_bg_human"
-        		android:defaultValue="#55cc55" />
-    <EditTextPreference
+        		android:entries="@array/color_array"
+        		android:entryValues="@array/disp_color_array"/>
+    <ListPreference
         		android:key="bg_ai"
         		android:title="@string/bg_ai"
         		android:summary="@string/summary_bg_ai"
-        		android:defaultValue="#cc5555" />
+        		android:entries="@array/color_array"
+        		android:entryValues="@array/disp_color_array"/>
     <ListPreference
         		android:key="player_symbol"
         		android:title="@string/player_symbol"

@@ -8,7 +8,23 @@
     <string-array name="disp_symbols_array">
         <item>X</item>
         <item>O</item>
-        <item> </item>
+        <item>None</item>
+    </string-array>
+    <string-array name="color_array">
+        <item>Red</item>
+        <item>Blue</item>
+        <item>Green</item>
+        <item>Yellow</item>
+        <item>Cyan</item>
+        <item>Purple</item>
+    </string-array>
+    <string-array name="disp_color_array">
+        <item>#cc5555</item>
+        <item>#5555cc</item>
+        <item>#55cc55</item>
+        <item>#cccc55</item>
+        <item>#55cccc</item>
+        <item>#cc55cc</item>
     </string-array>
 </resources>
 
